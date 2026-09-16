@@ -10,6 +10,16 @@ const apiBaseUrl = codespaceName
   : `http://localhost:${port}`
 
 app.use(express.json())
+app.use((_request, response, next) => {
+  response.header('Access-Control-Allow-Origin', '*')
+  response.header('Access-Control-Allow-Headers', 'Content-Type')
+  response.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+  if (_request.method === 'OPTIONS') {
+    response.sendStatus(204)
+    return
+  }
+  next()
+})
 app.use('/api', apiRouter)
 
 app.get('/api/health', (_request, response) => {
